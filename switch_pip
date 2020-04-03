@@ -1,4 +1,5 @@
-# 
+#!/bin/zsh
+ 
 # Refer to: https://mothergeo-py.readthedocs.io/en/latest/development/how-to/alternate-pypi.html
 # https://pip.pypa.io/en/stable/user_guide/#config-file
 # 
