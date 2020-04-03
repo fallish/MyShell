@@ -1,0 +1,56 @@
+# 
+# Refer to: https://mothergeo-py.readthedocs.io/en/latest/development/how-to/alternate-pypi.html
+# https://pip.pypa.io/en/stable/user_guide/#config-file
+# 
+
+source=$1
+source=${source:-default}
+
+# default pip config
+index=https://pypi.org/simple
+trust_host=pypi.org
+
+# source list
+source_list="pypi, aliyun, tsinghua, ustc, douban"
+
+# swtich config according to source key
+if [ "$source" = "" ] || [ "$source" = "default" ] || [ "$source" = "pypi" ]; then
+  index=https://pypi.org/simple
+  trust_host=pypi.org
+elif [ "$source" = "aliyun" ]; then
+  index=https://mirrors.aliyun.com/pypi/simple
+  trust_host=mirrors.aliyun.com
+elif [ "$source" = "tsinghua" ]; then
+  index=https://pypi.tuna.tsinghua.edu.cn/simple
+  trust_host=pypi.tuna.tsinghua.edu.cn
+elif [ "$source" = "ustc" ]; then 
+  index=https://pypi.mirrors.ustc.edu.cn/simple
+  trust_host=pypi.mirrors.ustc.edu.cn
+elif [ "$source" = "douban" ]; then
+  index=http://pypi.douban.com/simple/
+  trust_host=pypi.douban.com
+else
+  echo "Error: unknown pip source:  $source, supported sources: [$source_list] "
+  exit 1
+fi
+
+# Make config direction
+#config_dir=~/.conifg/pip
+config_dir=~/.pip
+[ ! -e "$config_dir" ] && mkdir -p "$config_dir"
+
+# pip config 
+pip_config="
+[global]
+index-url=$index
+
+[install]
+trusted-host=$trust_host
+"
+
+# Switch to specified source
+echo "Switch to source $source, index-url=$index"
+echo "$pip_config" > "${config_dir}/pip.conf"
+#echo "$pip_config"
+
+echo "Note: supported sources [$source_list] "

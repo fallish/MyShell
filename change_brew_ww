@@ -1,0 +1,8 @@
+# https://www.xiebruce.top/720.html
+
+cd "$(brew --repo)" && git remote set-url origin  https://github.com/Homebrew/brew.git
+
+cd "$(brew --repo)/Library/Taps/homebrew/homebrew-core" && git remote set-url origin https://github.com/Homebrew/homebrew-core.git
+
+sed -i -e '/HOMEBREW_BOTTLE_DOMAIN/d' ~/.zshrc
+source ~/.zshrc
