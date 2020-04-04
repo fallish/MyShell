@@ -2,28 +2,37 @@
 
 source=${1:-default}
 
+
+Usage() {
+  echo "Usage: switch_brew <source> "
+  echo "       Valid sources are: default, tsinghua, aliyun, ustc "
+}
+
+
 if [ "$source" != "default" ] && [ "$source" != "tsinghua" ] && [ "$source" != "aliyun" ] && [ "$source" != "ustc" ]; then
   echo "Error: invalid source $source "
+  Usage
+  exit 1
 fi
 
 
 # Brew urls 
 declare -A brew_urls
-brew_urls["default"]="https://github.com/Homebrew"
-brew_urls["tsinghua"]="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew"
-brew_urls["aliyun"]="https://mirrors.aliyun.com/homebrew"
-brew_urls["ustc"]="https://mirrors.ustc.edu.cn"
+brew_urls[default]="https://github.com/Homebrew"
+brew_urls[tsinghua]="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew"
+brew_urls[aliyun]="https://mirrors.aliyun.com/homebrew"
+brew_urls[ustc]="https://mirrors.ustc.edu.cn"
 
 # Bottles
 declare -A bottles
-bottles["default"]=""
-bottles["tsinghua"]="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles"
-bottles["aliyun"]="https://mirrors.aliyun.com/homebrew/homebrew-bottles"
-bottles["ustc"]="https://mirrors.ustc.edu.cn/homebrew-bottles"
+bottles[default]=""
+bottles[tsinghua]="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles"
+bottles[aliyun]="https://mirrors.aliyun.com/homebrew/homebrew-bottles"
+bottles[ustc]="https://mirrors.ustc.edu.cn/homebrew-bottles"
 
 # Get brew url and bottle
-brew_url=${brew_urls["$source"]}
-bottle=${bottles["$source"]}
+brew_url=${brew_urls[$source]}
+bottle=${bottles[$source]}
 
 echo "Switch brew for $source: $brew_url" 
 echo "Switch bottle for $source: $bottle" 
