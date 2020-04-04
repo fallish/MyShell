@@ -1,0 +1,46 @@
+#!/bin/zsh
+
+source=${1:-default}
+
+if [ "$source" != "default" ] && [ "$source" != "tsinghua" ] && [ "$source" != "aliyun" ] && [ "$source" != "ustc" ]; then
+  echo "Error: invalid source $source "
+fi
+
+
+# Brew urls 
+declare -A brew_urls
+brew_urls["default"]="https://github.com/Homebrew"
+brew_urls["tsinghua"]="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew"
+brew_urls["aliyun"]="https://mirrors.aliyun.com/homebrew"
+brew_urls["ustc"]="https://mirrors.ustc.edu.cn"
+
+# Bottles
+declare -A bottles
+bottles["default"]=""
+bottles["tsinghua"]="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles"
+bottles["aliyun"]="https://mirrors.aliyun.com/homebrew/homebrew-bottles"
+bottles["ustc"]="https://mirrors.ustc.edu.cn/homebrew-bottles"
+
+# Get brew url and bottle
+brew_url=${brew_urls["$source"]}
+bottle=${bottles["$source"]}
+
+echo "Switch brew for $source: $brew_url" 
+echo "Switch bottle for $source: $bottle" 
+#exit 1
+
+# Switch brew url
+git -C "$(brew --repo)" remote set-url origin ${brew_url}/brew.git
+git -C "$(brew --repo homebrew/core)" remote set-url origin ${brew_url}/homebrew-core.git
+git -C "$(brew --repo homebrew/cask)" remote set-url origin ${brew_url}/homebrew-cask.git
+
+# Update bash profile
+sed -i -e "/HOMEBREW_BOTTLE_DOMAIN/d" ~/.zshrc 
+if [ "$source" != "default" ]; then
+  echo "# set HOMEBREW_BOTTLE_DOMAIN" >> ~/.zshrc 
+  echo "export HOMEBREW_BOTTLE_DOMAIN=${bottle}" >> ~/.zshrc
+fi
+source ~/.zshrc
+
+
+
