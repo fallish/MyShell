@@ -4,12 +4,25 @@ source=${1:-default}
 
 
 Usage() {
-  echo "Usage: switch_brew <source> "
-  echo "       Valid sources are: default, tsinghua, aliyun, ustc "
+cat << EOF
+Usage: switch_brew <source> [options]
+
+Sources:
+  default       Default brew source (https://github.com/Homebrew)
+  aliyun        Aliyun brew source (https://mirrors.aliyun.com/homebrew) 
+  tsinghua      Tsinghua Univercity brew source (https://mirrors.tuna.tsinghua.edu.cn/git/homebrew) 
+  ustc          USTC brew source (https://mirrors.ustc.edu.cn)
+
+General Options:
+  -h, --help                  Show help.
+
+EOF
 }
 
-
-if [ "$source" != "default" ] && [ "$source" != "tsinghua" ] && [ "$source" != "aliyun" ] && [ "$source" != "ustc" ]; then
+if [ "$source" = "-h" ] || [ "$source" = "--help" ]; then
+  Usage
+  exit 0
+elif [ "$source" != "default" ] && [ "$source" != "tsinghua" ] && [ "$source" != "aliyun" ] && [ "$source" != "ustc" ]; then
   echo "Error: invalid source $source "
   Usage
   exit 1
